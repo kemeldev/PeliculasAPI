@@ -35,7 +35,7 @@ creamos metodos de post, put, delete, y hacemos las pruebas de que funcional
 
 ------
 
-vamos a trabajar con la entidad Actores, la creamos
+# vamos a trabajar con la entidad Actores, la creamos
 y la metemos en el db context a traves de un dbset
 add migrations, update database
 
@@ -46,7 +46,7 @@ creamos el mapeo de entidad autores a autores DTO
 
 ------
 
-recibir fotos de actores
+# recibir fotos de actores
 usar Iformfile en ActorCreacion DTO
 en actores controller hay que cambiar el metodo post de frombody a fromform porque por ahi va a venir al imagen
 
@@ -61,7 +61,7 @@ tambien creamos la validacion para el tipo de archivo y unos enums
 
 --- 
 
-Creamos una Azure storage account
+# Creamos una Azure storage account
 
 Instalamos el paquete nuget llamado Azure.Stora.Blobs
 
@@ -83,5 +83,59 @@ Se completan los metodos y se prueba su funcionamiento
 
 ----
 
-Se va a hacer una implementacion alternativa para guardar archivos de forma local
+# Se va a hacer una implementacion alternativa para guardar archivos de forma localdas0
+
+Creamos la clase en servicios y le implementamos una dependencias distintas, ver codigo
+y creamos una carpeta wwwroot
+
+Hay que habilitar en startup el servicio y tambien una opcion para que nuestra api pueda servir static files
+
+--- 
+
+# Implementar HTTP Patch
+
+creamos un nuevo DTO para que se puedan actualizar datos sin tener que cambiar foto
+
+para no repetir codigo implementamos una herencia en ActorCreacionDTO
+
+implementamos el metodo actores controller 
+public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument)
+
+<Importante> intstallar Microsoft.AspNetCore.JsonPatch y Otro paquete Microsoft.AspNetCore.Mvc.NewtonsoftJson
+
+hay que configurar este servicio en startuod
+
+tambien esto en automapper  CreateMap<ActorPatchDTO, Actor>().ReverseMap();
+
+----
+
+# Paginacion
+
+crear DTO paginacion
+creamos una clase auxiliar en helpers que contenga el total de recursos 
+implementamos el metodo Get en actores controller
+
+en helpers se crea otra clase para que este sistema de paginacion pueda ser implementado en cualquier request
+
+ya con los metodos estaticos creados se pueden aplicar de forma simple en cualquier métodos
+
+# Entidad Pelicula
+
+Creamos entidad pelicula
+Agregamos el dbset y hacemos migracions
+
+Creamos un peliculas controller con el metodo get para la lista y get por id
+
+hay que crear un DTO de creacionPeliculas
+
+Creamos el metodo Post, Put patch delete, el codigo es practicamente reutilizado de los actoresController
+
+hacemos los automappers
+
+# Relaciones muchos a muchos
+
+
+
+
+
 

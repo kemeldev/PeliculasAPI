@@ -17,11 +17,15 @@ namespace PeliculasAPI
             services.AddAutoMapper(typeof(Startup));
 
             services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+            // Si qusieramos usar un almacenamiento local
+            //services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
+            //services.AddHttpContextAccessor();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddEndpointsApiExplorer();
         }
 
@@ -33,6 +37,10 @@ namespace PeliculasAPI
             }
 
             app.UseHttpsRedirection();
+
+            // para almacenar los archivos en local
+            app.UseStaticFiles();
+
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
