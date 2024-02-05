@@ -29,7 +29,7 @@ namespace PeliculasAPI.Validaciones
 
             if (!tiposValidos.Contains(formFile.ContentType))
             {
-                return new ValidationResult($"El tipo de archivo debe ser uno de los siguientes: {string.Join(",", tiposValidos)}");
+                return new ValidationResult($"El tipo de archivo debe ser uno de los siguientes: {string.Join(", ", tiposValidos)}");
             }
             return ValidationResult.Success;
         }

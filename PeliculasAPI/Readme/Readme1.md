@@ -59,3 +59,29 @@ luego esta validacion se la pasamos al actorcreacion DTO
 
 tambien creamos la validacion para el tipo de archivo y unos enums 
 
+--- 
+
+Creamos una Azure storage account
+
+Instalamos el paquete nuget llamado Azure.Stora.Blobs
+
+Creamos una nueva carpeta servicios para ayudarnos a trabajar con azure storage
+Creamos en el una interfaz IAlmacenadorArchivos
+
+Creamos tambien una clase AlmacenadorArchivosAzure que implemente la interfaz y creamos lo metodos para crear, editar y borrar archivos en azure
+
+De azure obtenemos la conection strings y las colocamos en los appsettings
+
+En startup configuramos el servicio
+
+Ahora vamos a actores controller, cambiamos los metodos post y put, 
+en el put se hizo un toque, que tambien tuvimos que modificar el AutomapperProfiles
+CreateMap<ActorCreacionDTO, Actor>()
+                .ForMember(x => x.Foto, options => options.Ignore());
+
+Se completan los metodos y se prueba su funcionamiento
+
+----
+
+Se va a hacer una implementacion alternativa para guardar archivos de forma local
+
