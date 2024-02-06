@@ -134,6 +134,72 @@ hacemos los automappers
 
 # Relaciones muchos a muchos
 
+Relacionar entidades 
+Generos-Peliculas  Muchos a muchos
+Peliculas-Actores Muchos a Muchos
+
+Hay que crer una tabla intermedia para relacionarlas
+
+Creamos nueva entidad PeliculasGeneros y otra peliculas actores
+
+ public int ActorId { get; set; }
+ public int PeliculaId { get; set; }
+
+ las agregamos en el dbcontext
+
+ recordar que como tenemos llaves primarias dobles hay que usar el apifluente, que es el codigo en la parte de arriba que colocamos en ApplicationDbContext
+
+ En peliculaCreacionDTO agregamos una Lista de enteros de generosID para que los clientes puedan enviarlo a la hora de crear una pelicula
+
+ MODEL BINDING no lee bien datos como listas de enteros esn este caso, entonces hay que crear un 
+
+ aprender mas sobre model binder de ASP.Net core
+
+ # Custom Model Binding
+
+ vamos a hacer un model binder para que mapee el listado de numero a nuestro List<int> en creacion DTO
+
+ en helpers creamos una clase typeBinder 
+
+y en pelicula creacion DTO la implementamos
+
+# Custom Model Binding
+
+tambien hay que hacer un binding de los listados de actores porque estos son tipos complejos
+
+para eso creamos un DTO primero
+
+con el binding lo que hicimos es que pasamos un generico, entonces permite que se le pase cualquier tipo de datos
+
+----
+
+configurar el automapper para que cuando se cree una pelicula tambien mapee el listado de generos y de actores
+
+hay que agregar todas las +++propiedades de navegacion+++ a las entidades correspondientes esto a la entidad Pelicula
+
+public List<PeliculasActores> PeliculasActores { get; set; }
+public List<PeliculasGeneros> PeliculasGeneros { get; set; }
+
+y agregar esto a la entidad actor
+
+public List<PeliculasActores> PeliculasActores { get; set; }
+public List<PeliculasGeneros> PeliculasGeneros { get; set; }
+
+y agregamos esto a la entidad generos
+
+public List<PeliculasGeneros> PeliculasGeneros { get; set; }
+
+---
+
+ORDEN
+
+creamos nuevo metodo en peliculas controller 
+
+se lo aplicamos al Post y al put
+
+
+
+
 
 
 
