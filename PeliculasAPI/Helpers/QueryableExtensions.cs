@@ -6,9 +6,19 @@ namespace PeliculasAPI.Helpers
     {
         public static IQueryable<T> Paginar<T>(this IQueryable<T> queryable, PaginacionDTO paginacionDTO)
         {
+            int pagina = paginacionDTO.Pagina < 1 ? 1 : paginacionDTO.Pagina;
+            int cantidadRegistrosPorPagina = paginacionDTO.CantidadRegistrosPorPagina;
+
             return queryable
-                .Skip((paginacionDTO.Pagina - 1) * paginacionDTO.CantidadRegistrosPorPagina)
-                .Take(paginacionDTO.CantidadRegistrosPorPagina);
+                .Skip((pagina - 1) * cantidadRegistrosPorPagina)
+                .Take(cantidadRegistrosPorPagina);
         }
+
+        //public static IQueryable<T> Paginar<T>(this IQueryable<T> queryable, PaginacionDTO paginacionDTO)
+        //{
+        //    return queryable
+        //        .Skip((paginacionDTO.Pagina - 1) * paginacionDTO.CantidadRegistrosPorPagina)
+        //        .Take(paginacionDTO.CantidadRegistrosPorPagina);
+        //}
     }
 }

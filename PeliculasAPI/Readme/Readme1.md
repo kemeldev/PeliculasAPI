@@ -197,6 +197,31 @@ creamos nuevo metodo en peliculas controller
 
 se lo aplicamos al Post y al put
 
+# Filtrar datos de peliculas
+
+usamos un seed data ( un codigo para crear o meter datos en la DB a traves de codigo)
+lo agregamos en Application DbContext
+
+en el public override <debemos> agregar la seed data SeedData(modelBuilder);
+
+hacemos la migracion y update db
+
+Trabajamos en controlador peliculas, empezamos con el metodo Get, para que devuelva proximos estrenos y otras que están en cines
+
+## OJO
+
+var proximoEstreno = await context.Peliculas
+                .Where(x => x.FechaEstreno > hoy)
+                .OrderBy(x => x.FechaEstreno)
+                .Take(top)
+                .ToListAsync();
+
+Creamos estas variables, pero para devolverlas al cliente hay que asignarlas a un DTO, por lo que creamos uno PeliculasIndexDTO que devuelve 2 listas de peliculas
+
+# Filtrar por genero
+
+creamos un metodo http get filtrar y creamos DTO que va a contener lo que devuelve el metodo FiltroPeliculasDTO
+
 
 
 
