@@ -283,8 +283,28 @@ try/catch
 implementamos Ilogger para poder "imprimir" las exepciones
 
 
+# Crear clase base para controller
 
+Tenemos actualmente codigo repetido en controlladores, 
+Ej metodo patch en peliculascontroller y actores es practicamente el mismo
 
+Vamos a utilizar genericos para reutilizar la logica
 
+Creamos nuevo controllador CustonBaseController que hereda de controller base y aca creamos todos los métodos genéricos para poder implementarlos en los demas controlladores
 
+primero lo usamos en generos controller en el primer metodo get
 
+luego en el metodo get por id, 
+
+pero OJO hay que implementar una interfaz cuando creamos este metodo
+
+protected async Task<TDTO>> Get<TEntidad, TDTO>(int id) where TEntidad : class
+        {
+            var entidad = await context.Set<TEntidad>().AsNoTracking().FirstOrDefaultAsync(x => x.Id)
+debido a que al ser un generico no podemos saber si el DTO que le vamos a pasar tiene ID
+
+creamos esta interfaz en entidades interface IId y se la pasamos a las entidades que ya existian
+
+Tambien hacemos lo mismo con actores controller, pero aca tambien tnemos que crear nuevos metodos para nuestro CustomBaseController
+
+en peliculas controller casi todos los metodos son personalizados por lo que no se usan los metodos genericos, unicamente en Patch
