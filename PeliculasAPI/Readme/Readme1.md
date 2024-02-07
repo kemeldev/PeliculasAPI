@@ -308,3 +308,25 @@ creamos esta interfaz en entidades interface IId y se la pasamos a las entidades
 Tambien hacemos lo mismo con actores controller, pero aca tambien tnemos que crear nuevos metodos para nuestro CustomBaseController
 
 en peliculas controller casi todos los metodos son personalizados por lo que no se usan los metodos genericos, unicamente en Patch
+
+
+# Entidad sala cine y PeliculasSalasCines
+
+se crean entidades, se crean propiedades de navegacion, a la entidad pelicula tambien le agregamos propuedades de navegacion
+
+en dbcontext creamos los nuevos dbsets
+
+y tambien en application dbcontext configuramos la llave primaria que representa la relacion muchos a muchos
+modelBuilder.Entity<PeliculasSalasCine>()
+                .HasKey(x => new { x.PeliculaId, x.SalaDeCineId });
+
+creamos la migraciones
+
+luego creamos los DTOs correspondientes , SaladecineDTO y SalaDeCineCreacionDTO
+
+Creamos el controller SalasDeCineControllers, practicamente todos los metodos son facilmente aplicados con los genericos previamente creados
+
+Configuramos el automapper
+
+CreateMap<SalaDeCine, SalaDeCineDTO>().ReverseMap();
+            CreateMap<SalaDeCineCreacionDTO, SalaDeCine>();
