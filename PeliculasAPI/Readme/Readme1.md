@@ -329,4 +329,29 @@ Creamos el controller SalasDeCineControllers, practicamente todos los metodos so
 Configuramos el automapper
 
 CreateMap<SalaDeCine, SalaDeCineDTO>().ReverseMap();
-            CreateMap<SalaDeCineCreacionDTO, SalaDeCine>();
+CreateMap<SalaDeCineCreacionDTO, SalaDeCine>();
+
+# Agregar campo de ubicacion a la sala de cine, para hacer queryes espaciales (sala mas cercana y a que distancia)
+
+instalamos la libreria NetTopologieSuite, OJO la version de entityframework core
+
+Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite
+
+luego la configuramos en el startup, en AddDbcontext
+
+services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                sqlServerOptions => sqlServerOptions.UseNetTopologySuite()
+                ));
+
+vamos a la entidad de sala de cine y agregamos un campo para representar ubicacion geográfica
+
+public Point Ubicacion { get; set; }
+
+y agregamos una AddMigration SalaCineUbicacion
+
+<Tenemos> un problema con el typo Point, decidí no proceder con esta seccion porque despues podriamos tener algun otro problema con codigo mas adelante
+
+Vamos a saltarla
+
+# 
