@@ -222,7 +222,65 @@ Creamos estas variables, pero para devolverlas al cliente hay que asignarlas a u
 
 creamos un metodo http get filtrar y creamos DTO que va a contener lo que devuelve el metodo FiltroPeliculasDTO
 
+# Data Relacionada, como conocer el genero y los actoress cuando se hace un solicitud
 
+Cuando el cliente hace un get por id , la pelicula le entrega su informacion, pero no la data de genero y actores relacionada
+
+Vamos a trabajar en el método, get por id
+
+.Include(x => x.PeliculasActores).ThenInclude(x => x.Actor)
+.Include(x => x.PeliculasGeneros).ThenInclude(x => x.Genero)
+
+con este codigo traemos la informaicon, sin embargo, el DTO no tiene propiedades que puedan recibir y pasar esta data a la respuesta enotnces
+
+Generamos un nuevo DTO PeliculaDetallesDTO y dentro de este a su vez tendra otro DOT ActorPeliculaDetalleDTO
+
+ahora que hay que hacer el mapeo de PeliculaDetallesDTO a pelicula
+
+CreateMap<Pelicula, PeliculaDetallesDTO>()
+                .ForMember(x => x.Generos, options => options.MapFrom(MapPeliculasGeneros))
+                .ForMember(x => x.Actores, options => options.MapFrom(MapPeliculasActores));
+
+
+## Order by
+
+vamos a permitir al usuario odrder los resultados de peliculas tipo ascendente o descendente del campo fecha estreno y titulo
+
+una manera de hacerlo es:
+
+en el metodo filtro , en este DTO FiltroPeliculasDTO, crear 2 campos o propiedades nuevas
+
+public string CampoOrdenar { get; set; }
+public bool OrdenAscendente { get; set; } = true;
+
+y modificamos el metodo en filtro, creamos un if
+
+if (!string.IsNullOrEmpty(filtroPeliculasDTO.CampoOrdenar))
+            {
+                if (filtroPeliculasDTO.CampoOrdenar == "titulo")
+                {
+                    if (filtroPeliculasDTO.OrdenAscendente)
+                    {
+                        peliculasQueryable = peliculasQueryable.OrderBy(x => x.Titulo);
+                    } else
+                    {
+                        peliculasQueryable = peliculasQueryable.OrderByDescending(x => x.Titulo);
+                    }
+                }
+            }
+
+este es el codigo manual, pero tambien se puede usar una libreria que permite utilizar string para hacer el ordenamiento
+
+System.Linq.Dynamic.Core
+
+con esta libreria sustituimos el codigo por algo mas simpler. Ver
+
+ya con esto funciona
+
+Tambien se le pueden agregar algunas exepciones por si el cliente nos envia informacion erronea
+try/catch
+
+implementamos Ilogger para poder "imprimir" las exepciones
 
 
 
