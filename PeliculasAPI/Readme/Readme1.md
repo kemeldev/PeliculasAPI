@@ -354,4 +354,73 @@ y agregamos una AddMigration SalaCineUbicacion
 
 Vamos a saltarla
 
-# 
+# Sistemas de usuarios
+
+Lo primero es que el application DBcontext herede de IdentityDbContext
+hay que instalar el paruete de asp.net Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
+en el startup hacemos las configuraciones
+
+services.AddIdentity<IdentityUser, IdentityRole>()
+              .AddEntityFrameworkStores<ApplicationDbContext>()
+              .AddDefaultTokenProviders();
+
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+        Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
+            ClockSkew = TimeSpan.Zero
+        }
+    )
+
+practicamentes las copiamos , ademas hay que instalar el paquete de asp.net core 
+Microsoft.AspNetCore.Authentication.JwtBearer
+
+esta llave, "jwt:key"
+
+hayq que crearla en el app settings JSON
+
+--- Creamos el cuentas controller --- y pegamos el codigo del controllador que ya habiamos creado en el curso
+
+hay que crear varios DTOs, UserToken, UserInfo, UsuarioDTO, EditarRolDTO
+
+hasta aca el proyecto Compila
+
+# Vamos a crear un usuario de prueba y agregarle el rol de admin
+
+en el appdbcontext en seed data agregamos:
+
+var rolAdminId = "cad66cba-8674-43bf-9fe5-ca2daac4a818";
+            var usuarioAdminId = "135dcaea-5dca-4f3c-ac63-28d7df8ac38f";
+
+var rolAdmin = new IdentityRole()
+{
+    Id = rolAdminId,
+    Name = "Admin",
+    NormalizedName = "Admin"
+};
+
+var passwordHasher = new PasswordHasher<IdentityUser>();
+
+var username = "kemel.developer@gmail.com";
+
+var usuarioAdmin = new IdentityUser()
+{
+    Id = usuarioAdminId,
+    UserName = username,
+    NormalizedUserName = username,
+    Email = username,
+    NormalizedEmail = username,
+    PasswordHash = passwordHasher.HashPassword(null, "Aa123456!")
+};
+
+Y hacemos un migration Add-Migration TablasIdentity
+
+
+

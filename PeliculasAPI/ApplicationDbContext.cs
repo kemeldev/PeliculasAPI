@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PeliculasAPI.Entidades;
+using System.Security.Claims;
 
 namespace PeliculasAPI
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -27,6 +29,45 @@ namespace PeliculasAPI
 
         private void SeedData(ModelBuilder modelBuilder)
         {
+            var rolAdminId = "cad66cba-8674-43bf-9fe5-ca2daac4a818";
+            var usuarioAdminId = "135dcaea-5dca-4f3c-ac63-28d7df8ac38f";
+
+            var rolAdmin = new IdentityRole()
+            {
+                Id = rolAdminId,
+                Name = "Admin",
+                NormalizedName = "Admin"
+            };
+
+            var passwordHasher = new PasswordHasher<IdentityUser>();
+
+            var username = "kemel.developer@gmail.com";
+
+            var usuarioAdmin = new IdentityUser()
+            {
+                Id = usuarioAdminId,
+                UserName = username,
+                NormalizedUserName = username,
+                Email = username,
+                NormalizedEmail = username,
+                PasswordHash = passwordHasher.HashPassword(null, "Aa123456!")
+            };
+
+            //modelBuilder.Entity<IdentityUser>()
+            //    .HasData(rolAdmin);
+
+            //modelBuilder.Entity<IdentityRole>()
+            //    .HasData(rolAdmin);
+
+            //modelBuilder.Entity<IdentityUserClaim<string>>()
+            //    .HasData(new IdentityUserClaim<string>()
+            //    {
+            //        Id = 1,
+            //        ClaimType = ClaimTypes.Role,
+            //        UserId = usuarioAdminId,
+            //        ClaimValue = "Admin"
+            //    });
+
 
             var aventura = new Genero() { Id = 4, Nombre = "Aventura" };
             var animation = new Genero() { Id = 5, Nombre = "Animación" };
