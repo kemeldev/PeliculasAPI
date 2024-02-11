@@ -420,7 +420,28 @@ var usuarioAdmin = new IdentityUser()
     PasswordHash = passwordHasher.HashPassword(null, "Aa123456!")
 };
 
-Y hacemos un migration Add-Migration TablasIdentity
+Y hacemos un migration Add-Migration TablasIdentity y el update database
+
+ahora en appdbcontext agregamos esto
+
+modelBuilder.Entity<IdentityUser>()
+                .HasData(rolAdmin);
+
+modelBuilder.Entity<IdentityRole>()
+    .HasData(rolAdmin);
+
+modelBuilder.Entity<IdentityUserClaim<string>>()
+    .HasData(new IdentityUserClaim<string>()
+    {
+        Id = 1,
+        ClaimType = ClaimTypes.Role,
+        UserId = usuarioAdminId,
+        ClaimValue = "Admin"
+    });
+
+y agregamos una migracion Admin Data
+
+Estamos haciendo estas migraciones por separado para poder modificarlas
 
 
 

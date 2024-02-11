@@ -53,20 +53,20 @@ namespace PeliculasAPI
                 PasswordHash = passwordHasher.HashPassword(null, "Aa123456!")
             };
 
-            //modelBuilder.Entity<IdentityUser>()
-            //    .HasData(rolAdmin);
+            modelBuilder.Entity<IdentityUser>()
+                .HasData(rolAdmin);
 
-            //modelBuilder.Entity<IdentityRole>()
-            //    .HasData(rolAdmin);
+            modelBuilder.Entity<IdentityRole>()
+                .HasData(rolAdmin);
 
-            //modelBuilder.Entity<IdentityUserClaim<string>>()
-            //    .HasData(new IdentityUserClaim<string>()
-            //    {
-            //        Id = 1,
-            //        ClaimType = ClaimTypes.Role,
-            //        UserId = usuarioAdminId,
-            //        ClaimValue = "Admin"
-            //    });
+            modelBuilder.Entity<IdentityUserClaim<string>>()
+                .HasData(new IdentityUserClaim<string>()
+                {
+                    Id = 1,
+                    ClaimType = ClaimTypes.Role,
+                    UserId = usuarioAdminId,
+                    ClaimValue = "Admin"
+                });
 
 
             var aventura = new Genero() { Id = 4, Nombre = "Aventura" };
