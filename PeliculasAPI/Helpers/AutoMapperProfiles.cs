@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using PeliculasAPI.DTOs;
 using PeliculasAPI.Entidades;
 
@@ -10,6 +11,8 @@ namespace PeliculasAPI.Helpers
         {
             CreateMap<Genero, GeneroDTO>().ReverseMap();
             CreateMap<GeneroCreacionDTO, Genero>();
+
+            CreateMap<IdentityUser, UsuarioDTO>();
 
             CreateMap<SalaDeCine, SalaDeCineDTO>().ReverseMap();
             CreateMap<SalaDeCineCreacionDTO, SalaDeCine>();

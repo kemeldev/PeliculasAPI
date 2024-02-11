@@ -441,7 +441,91 @@ modelBuilder.Entity<IdentityUserClaim<string>>()
 
 y agregamos una migracion Admin Data
 
-Estamos haciendo estas migraciones por separado para poder modificarlas
+Estamos haciendo estas migraciones por separado para poder modificarlas, porque se crear un ConcurrencyStamp que aparentemente hay que estarlo cambiando, 
+para evitar eso:
+
+lo que vamos a hacer es general el SQL de la migracion Admin Data y luego vamos a agregar ese SQL en una nueva migracion
+
+para eso en el package manager console : Script-Migration TablasIdentity ( el nombre de la migracion anterior)
+
+se crea un nueva tabla con el sql
+
+eliminamos esto que estaba al final
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240211180041_AdminData', N'8.0.1');
+GO
+
+y copiamos estos datos que salieron de la ultima migracion que se llamaba Admin Data
+
+migrationBuilder.DeleteData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
+                keyValue: "cad66cba-8674-43bf-9fe5-ca2daac4a818");
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUserClaims",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUsers",
+                keyColumn: "Id",
+                keyValue: "135dcaea-5dca-4f3c-ac63-28d7df8ac38f");
+
+
+y hacemos remove migration que borra esa migracion
+
+Ahora creamos una nueva migracion, de nuevo le llamamos AdminData, pero esta vez estaria vacia
+
+y la llenamos on los datos del script, 
+
+Ahora en la base de datos de SQL, ya tenemos al usuario creado, ademas identificado con rol de administrador y en claim, tambien aparece
+
+ahora si en postman hago un post a https://localhost:7073/api/cuentas/login
+
+con este body
+
+{
+    "email": "kemel.developer@gmail.com",
+    "password": "Aa123456!"
+}
+
+tengo una respuesta Ok y nos envian un token con expiracion
+
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoia2VtZWwuZGV2ZWxvcGVyQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImtlbWVsLmRldmVsb3BlckBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEzNWRjYWVhLTVkY2EtNGYzYy1hYzYzLTI4ZDdkZjhhYzM4ZiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzM5Mjk4NDExfQ.tKqlZ8HMn3sLMOW83wQV9D-JaWxLzLVqKMVDvfKfEgo","expiracion":"2025-02-11T18:26:51.4862988Z"}
+
+
+ahora puedo ir a este enlace en postman https://localhost:7073/api/cuentas/usuarios
+
+y meter en autorizacion mi token: y darle get
+
+Tenemos un error de mapeo.
+
+Agregamos este que no estaba
+CreateMap<IdentityUser, UsuarioDTO>();
+ya funciona
+
+Ahora tambien podemos crear usuarios
+
+https://localhost:7073/api/cuentas/crear
+
+{
+    "email": "usuarioNormal@gmail.com",
+    "password" : "Aa123456!"
+}
+
+se crea y nos entrega un token
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidXN1YXJpb05vcm1hbEBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJ1c3VhcmlvTm9ybWFsQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNmIwNWMzOWUtNmRkMC00MDc2LWI1ZmYtZDY1N2ExYmMwZWMxIiwiZXhwIjoxNzM5Mjk5MjU4fQ.TfFGAX7qJkps49-VE2miziQg1FUCGK3GIJ0NaJVaYWY",
+    "expiracion": "2025-02-11T18:40:58.768759Z"
+
+ Ahora si este nuevo usuario con su token intenta ingresar a ver la lista de usuario
+
+ https://localhost:7073/api/cuentas/usuarios
+
+ va a recibir un 403 forbiden
 
 
 
