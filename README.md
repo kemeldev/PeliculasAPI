@@ -1,3 +1,1 @@
-# Profersor FELIPE, si logra revisar el codigo por el problema del POINT, seria ver este commit, 7581e039 ERROR con typo POINT y Queries Espaciales, Saltamos Seccion
-
-## Voy a seguir avanzando saltandome esta parte
+## Pelis API is a .Net Core API created with C# and SQL server to work as a headless backend for any front-end application
